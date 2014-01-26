@@ -14,7 +14,7 @@ The user needs to browse a series of multiple images in a high resolution on a m
 
 2. **Swipe**: user swipes right to see previous photo, left to see the next one.
 
-*As a subset:
+*As a subset:*
 - we could measure optimal drag-position for navigation (15% off swipe, 30%, 50% swipe or more?)
 - measure intentional and unintentional gestures (ie. when threshold is set too low (~5% swipe in left/right dimension), it can happen that user swiped unintentionally
 - we could also test two different galleries:
