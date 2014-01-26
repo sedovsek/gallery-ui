@@ -7,13 +7,9 @@ The user needs to browse a series of multiple images in a high resolution on a m
 
 **Action comparison:**
 
-1. **Tap**:
+1. **Tap**: user taps on a left side of a screen to see previous photo, or right side for next.
 
-user taps on a left side of a screen to see previous photo, or right side for next.
-
-2. **Swipe**:
-
-user swipes right to see previous photo, left to see the next one.
+2. **Swipe**: user swipes right to see previous photo, left to see the next one.
 
 - *As a subset, we could measure optimal drag-position for navigation (15% off swipe, 30%, 50% swipe or more?)
 Measure intentional and unintentional gestures (ie. when threshold is set too low (~5% swipe in left/right dimension), it can happen that user swiped unintentionall.y*
