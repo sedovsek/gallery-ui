@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sass app/css/style.scss:app/css/style.css
+coffee -c -o app/js/ lib/ui-research.coffee
+
+browserify -w -e lib/ui-research.coffee -o app/js/ui-research.js
