@@ -13,19 +13,19 @@ class Gallery
         @totalImages    = @images?.length
         @currentImage   = 0
 
-        @tracker = new Tracker
+        Tracker.init()
 
         @loadUserInterface()
 
         @setConainerWidth()
 
-    loadUserInterface: =>
-        # if Math.round(Math.random()) is 0
-        #     ui = new Tappy
-        # else
-        #     ui = new Swipey
-
-        ui = new Clicky { gallery : @ }
+    loadUserInterface: ->
+        if Math.round(Math.random()) is 0
+            Tracker.setUserInterface 'Tappy'
+            new Tappy { gallery : @ }
+        else
+            Tracker.setUserInterface 'Swipey'
+            new Swipey { gallery : @ }
 
     showImage: (image, animate) ->
         if image >= @totalImages
@@ -41,10 +41,15 @@ class Gallery
         offset = -((100 / @totalImages) * image)
         @setContainerOffset offset, animate
 
-        @tracker.addEvent 'imageShown', image
-
-    next: -> @showImage @currentImage + 1, true
-    prev: -> @showImage @currentImage - 1, true
+    next: ->
+        image = @currentImage + 1
+        @showImage image, true
+        Tracker.trackEvent 'Next image', 'Image: ' + image, new Date().getTime()
+    
+    prev: ->
+        image = @currentImage - 1
+        @showImage image, true
+        Tracker.trackEvent 'Previous image', 'Image: ' + image, new Date().getTime()
 
     setConainerWidth: ->
         self = @

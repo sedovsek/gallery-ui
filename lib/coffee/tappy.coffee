@@ -1,14 +1,23 @@
-Gallery = require './gallery.coffee'
+Tracker = require "./tracker.coffee"
 
-# Gallery Tap UI
-class Tappy extends Gallery
-    constructor: ->
-        $(document).on 'tap', (e) ->
-            console.log 'tapped Left side'
-            @moveLeft
+# Gallery Click UI
+class Tappy
+    
+    constructor: (options) ->
+        @gallery = options.gallery
 
-        $(document).on 'tap', (e) ->
-            console.log 'tapped Right side'
-            @moveRight
+        # Touch events
+        new Hammer document, { drag_lock_to_axis: true }
+        $(document).on 'tap', (ev) => @handleTapEvent ev
 
-module.exportss = Tappy
+    handleTapEvent: (ev) ->
+        ev.gesture.preventDefault()
+        
+        position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+
+        if position.horizontal is 'right'
+            @gallery.next()
+        else
+            @gallery.prev()
+
+module.exports = Tappy
