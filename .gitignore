@@ -4,3 +4,7 @@
 
 npm-debug.log
 node_modules
+
+# Remove once you improve build process
+app/*.js
+app/*.css
