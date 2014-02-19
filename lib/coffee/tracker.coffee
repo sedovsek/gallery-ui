@@ -59,11 +59,11 @@ module.exports =
     getUserInterface: -> @ui
 
     trackUniqueVisit: ->
-        ga 'set', 'title', @getUserInterface() + ', ' + new Date().getTime()
+        ga 'set', 'title', @getUserInterface() + ' - ' + new Date().getTime()
         ga 'send', 'pageview'
 
     trackFailedAttempt: ->
-        ga 'set', 'title', 'Desktop, ' + new Date().getTime()
+        ga 'set', 'title', 'Desktop - ' + new Date().getTime()
         ga 'send', 'pageview'
 
     calculateInteractionPosition: (coordinates) ->
