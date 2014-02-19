@@ -1,6 +1,0 @@
-#!/bin/bash
-
-sass --watch lib/sass/style.scss:app/css/style.css
-coffee -c -w -o app/js/ lib/*
-
-watchify app/js/app.js -o app/js/app.js -v
