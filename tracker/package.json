@@ -1,0 +1,20 @@
+{
+  "name"        : "ui-tracker",
+  "version"     : "0.0.1",
+  "title"       : "PhD research: UI Tracker",
+  "description" : "PhD research: Tracker for testing performance of different User Interfaces for pre-defined purposes.",
+  "homepage"    : "http://github.com/sedovsek/ui-tracker",
+  "keywords"    : ["javascript", "node", "server", "tracking", "usability"],
+  "author"      : "Robert Sedovšek <robert.sedovsek@gmail.com>",
+  "license"     : "MIT",
+  "directories" :  {
+    "lib": "./lib"
+  },
+  "repository":   {
+    "type" : "git",
+    "url"  :  "http://github.com/sedovsek/ui-tracker/ui-tracker.git"
+  },
+  "bin": {
+    "ui-tracker": "./bin/ui-tracker"
+  }
+}

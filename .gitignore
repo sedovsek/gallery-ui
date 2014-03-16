@@ -8,3 +8,7 @@ node_modules
 # Remove once you improve build process
 app/*.js
 app/*.css
+
+# Tracker
+tracker/lib/*.js
+tracker/tracking-logs
