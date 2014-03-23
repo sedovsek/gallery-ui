@@ -8,7 +8,7 @@ events = []
 
 record = (event) ->
     return unless action = event.query?.action
-    events.push { 'action' : action }
+    events.push { "action" : JSON.parse action }
 
 reset = ->
     events = []
