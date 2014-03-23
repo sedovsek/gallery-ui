@@ -1,19 +1,17 @@
-fs          = require 'fs'
-os          = require 'os'
-url         = require 'url'
-http        = require 'http'
-querystring = require 'querystring'
-Log         = require './log.js'
+fs   = require 'fs'
+os   = require 'os'
+url  = require 'url'
+http = require 'http'
+Log  = require './log.js'
 
-@events = {}
+events = []
 
-record = (params) ->
-    return unless key = params.query?.key
-    @events[key] or= 0
-    @events[key] +=  1
+record = (event) ->
+    return unless action = event.query?.action
+    events.push { 'action' : action }
 
 reset = ->
-    @events = {}
+    events = []
 
 flush = ->
     return unless config.logDir
@@ -23,34 +21,29 @@ flush = ->
     logDir = './'+config.logDir+'/'
     fs.mkdirSync logDir if not fs.existsSync logDir
 
-    event = { apes: '3' } 
+    events.forEach (event) =>
+        event.timestamp = now/1000
+        event.receiver = 'tracker'
+        event.receiverHostname = os.hostname()
 
-    event.timestamp = now/1000
-    event.receiver = 'tracker'
-    event.receiverHostname = os.hostname()
+        # Build log name
+        pad = (n) -> if n < 10 then '0'+n else n+''
+        # Hourly log file
+        logPath = logDir + "#{pad now.getUTCFullYear()}-#{pad now.getUTCMonth()+1}-#{pad now.getUTCDate()}_#{pad now.getUTCHours()}"
+        # Open log file
+        if !@currentLog or @currentLog.path != logPath
+            @currentLog = new Log logPath
 
-    # Build log name
-    interval = config.interval
-    from = Math.floor(event.timestamp/interval)*interval
-    from = new Date from*1000
+        # Write!
+        @currentLog.write new Buffer JSON.stringify(event) + '\n'
 
-    pad = (n) -> if n < 10 then '0'+n else n+''
-    # throw 'Seconds is not 0?' if from.getUTCSeconds() != 0
-    # throw 'Hostname contains _?' if event.receiverHostname.indexOf('_') != -1
+    reset()
 
-    logPath = logDir + "#{pad from.getUTCFullYear()}-#{pad from.getUTCMonth()+1}-#{pad from.getUTCDate()}_#{pad from.getUTCHours()}-#{pad from.getUTCMinutes()}_#{event.receiverHostname}.events"
-    # Open log file
-    if !@currentLog or @currentLog.path != logPath
-        @currentLog = new Log logPath
-
-    # Write!
-    @currentLog.write new Buffer JSON.stringify(event) + '\n'
-
-server = http.createServer (req, res) ->
-    params = url.parse req.url, true
+server = http.createServer (request, response) ->
+    params = url.parse request.url, true
     if params.pathname is '/pixel.gif'
-        res.writeHead 200, pixelHeaders
-        res.end pixel
+        response.writeHead 200, pixelHeaders
+        response.end pixel
         record params
 
 configPath = process.argv[2]
@@ -58,7 +51,7 @@ config     = JSON.parse fs.readFileSync(configPath).toString()
 pixel      = fs.readFileSync __dirname + '/pixel.gif'
 
 if not configPath or (configPath in ['-h', '-help', '--help'])
-    console.error "Usage: ui-tracker path/to/config.json"
+    console.error "Usage: bin/ui-tracker path/to/config.json"
     process.exit 0
 
 if config.logDir
