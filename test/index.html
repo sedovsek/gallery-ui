@@ -10,8 +10,6 @@
         var report = Math.random();
         
         document.getElementsByTagName('img')[0].src = imgSrc.split('=')[0] + '=' + report;
-
-        setTimeout("autoRefreshEvent", timeoutPeriod);
     }
 
     setInterval(autoRefreshEvent, 5000);
