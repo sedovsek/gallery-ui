@@ -11,4 +11,4 @@ app/*.css
 
 # Tracker
 tracker/lib/*.js
-tracker/tracking-logs
+tracker/logs
