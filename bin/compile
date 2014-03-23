@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+# Start grunt and child grunt processes for tracker
+exec grunt 'full-stack'
+
+exit 0

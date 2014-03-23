@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+# Start tracker
+tracker/bin/ui-tracker 'tracker/config.json'
+
+exit 0
