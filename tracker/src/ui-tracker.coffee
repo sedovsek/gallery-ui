@@ -47,12 +47,12 @@ server = http.createServer (request, response) ->
         record params
 
 configPath = process.argv[2]
-config     = JSON.parse fs.readFileSync(configPath).toString()
-pixel      = fs.readFileSync __dirname + '/pixel.gif'
-
 if not configPath or (configPath in ['-h', '-help', '--help'])
     console.error "Usage: bin/ui-tracker path/to/config.json"
     process.exit 0
+
+config = JSON.parse fs.readFileSync(configPath).toString()
+pixel  = fs.readFileSync __dirname + '/pixel.gif'
 
 if config.logDir
     console.info "Flushing hits to #{config.logDir}"
