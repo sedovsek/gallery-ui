@@ -2,5 +2,5 @@
     "port"     : "8000",
     "host"     : "192.168.1.170",
     "interval" : 3,
-    "logDir"   : "../logs"
+    "logDir"   : "logs"
 }
