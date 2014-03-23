@@ -5,20 +5,68 @@
     <title>Test</title>
     <script type="text/javascript">
     // Periodically send random key values to tracker via pixel.gif
-    function autoRefreshEvent() {
-        var imgSrc = document.getElementsByTagName('img')[0].src;
-        var report = Math.random();
-        
-        document.getElementsByTagName('img')[0].src = imgSrc.split('=')[0] + '=' + report;
+    function autoPing() {
+        ping(Math.random());
     }
 
-    setInterval(autoRefreshEvent, 5000);
+    function ping(report) {
+        var imgSrc = document.getElementsByTagName('img')[0].src;
+        document.getElementsByTagName('img')[0].src = imgSrc.split('=')[0] + '=' + report;
+        reportPing(report);
+    }
+
+    function startPinging() {
+        pinging = setInterval(autoPing, 5000);
+    }
+
+    function reportPing(report) {
+        document.getElementById('ping').innerText = report;
+    }
+
+    function setStatus(status) {
+        document.getElementById('status').innerText = status;
+    }
+
+    // Buttons to enable/disable pinging
+    window.onload = function() {
+        document.getElementById('start').addEventListener('click', function() {
+            startPinging();
+            setStatus('enabled');
+        });
+
+        document.getElementById('stop').addEventListener('click', function() {
+            clearInterval(pinging);
+            setStatus('disabled');
+        });
+
+        document.getElementById('send').addEventListener('click', function() {
+            ping(document.getElementById('custom').value);
+        });
+
+        startPinging();
+        setStatus('enabled');
+    };
     </script>
 </head>
 <body>
     
     <h1>Apes</h1>
-    <img src="http://192.168.1.170:8000/pixel.gif?key=init" alt="" />
+    <img src="http://192.168.1.170:8000/pixel.gif?action=sessionStart" alt="" />
+
+    Pinging status: <span id="status"></span>
+
+    <hr/>
+
+    Last event sent: <span id="ping"></span>
+
+    <hr/>
+
+    Send custom event: <input id="custom" name="custom" type="text" /> <button id="send">Send</button>
+
+    <hr/>
+
+    <button id="start">Start pinging</button>
+    <button id="stop">Stop pinging</button>
 
 </body>
 </html>
