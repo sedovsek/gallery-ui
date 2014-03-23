@@ -29,11 +29,25 @@ module.exports = (grunt) ->
                 files: ['lib/sass/**']
                 tasks: ['sass']
 
+        run_grunt:
+            options:
+                debug: true
+
+            simple_target:
+                src: ['tracker/Gruntfile.coffee']
+
+        concurrent:
+            target:
+                tasks: ['run_grunt', 'watch'],
+
+    grunt.loadNpmTasks 'grunt-concurrent'
     grunt.loadNpmTasks 'grunt-contrib-clean'
     grunt.loadNpmTasks 'grunt-browserify'
     grunt.loadNpmTasks 'grunt-contrib-uglify'
     grunt.loadNpmTasks 'grunt-contrib-sass'
     grunt.loadNpmTasks 'grunt-contrib-watch'
+    grunt.loadNpmTasks 'grunt-run-grunt'
 
-    grunt.registerTask 'default',    ['clean', 'browserify', 'sass', 'watch']
-    grunt.registerTask 'production', ['clean', 'browserify', 'uglify', 'sass', 'watch']
+    grunt.registerTask 'default',     ['clean', 'browserify', 'sass', 'watch']
+    grunt.registerTask 'full-stack',  ['clean', 'browserify', 'sass', 'concurrent']
+    grunt.registerTask 'production',  ['clean', 'browserify', 'uglify', 'sass', 'watch']
