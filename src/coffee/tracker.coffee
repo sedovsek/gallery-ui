@@ -5,8 +5,6 @@ module.exports =
         @deviceWidth  = self.innerWidth
         @deviceHeight = self.innerHeight
 
-        # maybe unless iPhone/Android - disable tracker?
-
         # Track touch events
         new Hammer document, { drag_lock_to_axis: true }
         $(document).on 'hold

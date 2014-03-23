@@ -7,7 +7,7 @@ domready ->
     if Utils.isMobile()
         new Gallery { container : $ '#gallery' }
 
-        $(window).on 'orientationchange', -> Tracker.trackEvent 'Other', 'Orientation change', window.orientation
+        $(window).on 'orientationchange', -> Tracker.trackEvent { 'Orientation change' : window.orientation }
         
         Tracker.trackUniqueVisit()
     else
