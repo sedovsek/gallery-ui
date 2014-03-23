@@ -8,7 +8,7 @@ module.exports = (grunt) ->
 
         browserify:
             dist:
-                files : 'app/script.js' : ['lib/coffee/app.coffee']
+                files : 'app/script.js' : ['src/coffee/app.coffee']
             options:
                 transform : ['coffeeify']
 
@@ -19,14 +19,14 @@ module.exports = (grunt) ->
         sass:
             build:
                 files:
-                    'app/style.css' : 'lib/sass/style.scss'
+                    'app/style.css' : 'src/sass/style.scss'
 
         watch:
             js:
-                files: ['lib/coffee/**']
+                files: ['src/coffee/**']
                 tasks: ['clean', 'browserify', 'sass']
             css:
-                files: ['lib/sass/**']
+                files: ['src/sass/**']
                 tasks: ['sass']
 
         run_grunt:
