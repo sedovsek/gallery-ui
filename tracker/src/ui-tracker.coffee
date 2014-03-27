@@ -7,8 +7,8 @@ Log  = require './log.js'
 events = []
 
 record = (event) ->
-    return unless action = event.query?.action
-    events.push { "action" : JSON.parse action }
+    return unless event = event.query?.event
+    events.push { "event" : JSON.parse event }
 
 reset = ->
     events = []
@@ -23,7 +23,6 @@ flush = ->
 
     events.forEach (event) =>
         event.timestamp = now/1000
-        event.receiver = 'tracker'
         event.receiverHostname = os.hostname()
 
         # Build log name

@@ -44,12 +44,12 @@ class Gallery
     next: ->
         image = @currentImage + 1
         @showImage image, true
-        Tracker.trackEvent 'Next image', 'Image: ' + image, new Date().getTime()
+        Tracker.trackEvent { 'Next image' : image }
     
     prev: ->
         image = @currentImage - 1
         @showImage image, true
-        Tracker.trackEvent 'Previous image', 'Image: ' + image, new Date().getTime()
+        Tracker.trackEvent { 'Previous image' : image }
 
     setConainerWidth: ->
         self = @

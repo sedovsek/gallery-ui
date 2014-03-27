@@ -1,6 +1,11 @@
 module.exports =
 
     init: ->
+        # Inject Tracking Pixel
+        @sessionId = @getUniqueSessionsId()
+        @trackingPixel = document.createElement 'img'
+        @trackingPixel.src = 'http://192.168.1.170:8000/pixel.gif?event=' + JSON.stringify { 'sessionStart' : @sessionId }
+
         @screen       = screen
         @deviceWidth  = self.innerWidth
         @deviceHeight = self.innerHeight
@@ -20,10 +25,13 @@ module.exports =
                         dragstart dragend',
                     (ev) => @handleDragEvent ev
         
+    getUniqueSessionsId: ->
+        Math.floor(Math.random()*100000) + '_' + new Date().getTime()
+
     handleTouchEvent: (ev) ->
         position = @calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
         
-        @trackEvent ev.type, JSON.stringify position, ev.timeStamp
+        @trackEvent { 'gesture' : ev.type, 'position' : position }
 
     handleDragEvent: (ev) ->
         # Track event when drag ends
@@ -43,26 +51,24 @@ module.exports =
         if ev.type is 'dragend'
             dragLasted = new Date().getTime() - @dragStarted
 
-            @trackEvent JSON.stringify(@drags), dragLasted, ev.timeStamp
+            @trackEvent { 'drags' : @drags.slice 0, 'duration' : dragLasted }, () =>
+                delete @drags
+                delete @dragStarted
+                delete @lastDragDirection
 
-            delete @dragStarted
-            delete @lastDragDirection
-            delete @drags
-            delete @dragEnded
-
-    trackEvent: (category, action, label) ->
-        ga 'send', 'event', category, action, label
+    trackEvent: (eventData, cb) ->
+        eventData.sessionId = @sessionId
+        @trackingPixel.src = @trackingPixel.src.split('=')[0] + '=' + JSON.stringify eventData
+        cb() if cb
 
     setUserInterface: (ui) -> @ui = ui
     getUserInterface: -> @ui
 
-    trackUniqueVisit: ->
-        ga 'set', 'title', @getUserInterface() + ' - ' + new Date().getTime()
-        ga 'send', 'pageview'
+    trackSelectedUi: ->
+        @trackEvent { 'user-interface': @getUserInterface() }
 
     trackFailedAttempt: ->
-        ga 'set', 'title', 'Desktop - ' + new Date().getTime()
-        ga 'send', 'pageview'
+        @trackEvent { 'device': 'desktop', 'stopSession': true }
 
     calculateInteractionPosition: (coordinates) ->
         # ---------------------------- #
