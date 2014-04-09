@@ -6,8 +6,6 @@ Utils    = require "./utils.coffee"
 # TODO: app.coffee should read config?
 
 domready ->
-    Tracker.init()
-
     if Utils.isMobile()
         new Gallery { container : $ '#gallery' }
 
