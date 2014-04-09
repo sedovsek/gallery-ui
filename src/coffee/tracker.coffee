@@ -10,6 +10,8 @@ module.exports =
         @deviceWidth  = self.innerWidth
         @deviceHeight = self.innerHeight
 
+        @storeSessionMetaData()
+
         # Track touch events
         new Hammer document, { drag_lock_to_axis: true }
         $(document).on 'hold
@@ -27,6 +29,16 @@ module.exports =
         
     getUniqueSessionsId: ->
         Math.floor(Math.random()*100000) + '_' + new Date().getTime()
+
+    storeSessionMetaData: ->
+        @trackEvent {
+            'userAgent': navigator.userAgent,
+            'deviceDimensions': {
+                'screenInfo'   : { @screen },
+                'deviceWidth'  : @deviceWidth,
+                'deviceHeight' : @deviceHeight
+            }
+        }
 
     handleTouchEvent: (ev) ->
         position = @calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
@@ -51,15 +63,15 @@ module.exports =
         if ev.type is 'dragend'
             dragLasted = new Date().getTime() - @dragStarted
 
-            @trackEvent { 'drags' : @drags.slice 0, 'duration' : dragLasted }, () =>
-                delete @drags
-                delete @dragStarted
-                delete @lastDragDirection
+            @trackEvent { 'drags' : @drags, 'duration' : dragLasted }
 
-    trackEvent: (eventData, cb) ->
+            delete @drags
+            delete @dragStarted
+            delete @lastDragDirection
+
+    trackEvent: (eventData) ->
         eventData.sessionId = @sessionId
         @trackingPixel.src = @trackingPixel.src.split('=')[0] + '=' + JSON.stringify eventData
-        cb() if cb
 
     setUserInterface: (ui) -> @ui = ui
     getUserInterface: -> @ui
@@ -81,7 +93,7 @@ module.exports =
         # |             |              #
         # ---------------------------- #
         pos = {}
-        pos.vertical   = if coordinates.y <= (@deviceHeight)/2 then 'bottom' else 'top'
-        pos.horizontal = if coordinates.x <= (@deviceWidth)/2  then 'left'   else 'right'
+        pos.vertical   = if coordinates.y <= (@deviceHeight)/2 then 'top'  else 'bottom'
+        pos.horizontal = if coordinates.x <= (@deviceWidth)/2  then 'left' else 'right'
 
         pos
