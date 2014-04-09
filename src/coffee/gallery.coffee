@@ -17,6 +17,8 @@ class Gallery
 
         @loadUserInterface()
 
+        Tracker.trackSelectedUi()
+
         @setConainerWidth()
 
     loadUserInterface: ->

@@ -10,8 +10,6 @@ domready ->
         new Gallery { container : $ '#gallery' }
 
         $(window).on 'orientationchange', -> Tracker.trackEvent { 'Orientation change' : window.orientation }
-        
-        Tracker.trackSelectedUi()
     else
         $('body').text 'Sorry. This gallery is a part of a research and it is availiable on mobile devices only.'
         Tracker.trackFailedAttempt()
