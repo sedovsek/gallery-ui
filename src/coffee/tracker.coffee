@@ -31,14 +31,11 @@ module.exports =
         Math.floor(Math.random()*100000) + '_' + new Date().getTime()
 
     storeSessionMetaData: ->
-        @trackEvent {
-            'userAgent': navigator.userAgent,
-            'deviceDimensions': {
-                'screenInfo'   : { @screen },
-                'deviceWidth'  : @deviceWidth,
-                'deviceHeight' : @deviceHeight
-            }
-        }
+        @trackEvent
+            'userAgent'    : navigator.userAgent
+            'screenInfo'   : { @screen }
+            'deviceWidth'  : @deviceWidth
+            'deviceHeight' : @deviceHeight
 
     handleTouchEvent: (ev) ->
         position = @calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
