@@ -8,7 +8,7 @@ events = []
 
 record = (event) ->
     return unless event = event.query?.event
-    events.push { "event" : JSON.parse event }
+    events.push JSON.parse event
 
 reset = ->
     events = []
@@ -22,9 +22,6 @@ flush = ->
     fs.mkdirSync logDir if not fs.existsSync logDir
 
     events.forEach (event) =>
-        event.timestamp = now/1000
-        event.receiverHostname = os.hostname()
-
         # Build log name
         pad = (n) -> if n < 10 then '0'+n else n+''
         # Hourly log file
@@ -47,7 +44,7 @@ server = http.createServer (request, response) ->
 
 configPath = process.argv[2]
 if not configPath or (configPath in ['-h', '-help', '--help'])
-    console.error "Usage: bin/ui-tracker path/to/config.json"
+    console.error "Usage: bin/ui-tracker path/to/config.js"
     process.exit 0
 
 config = JSON.parse fs.readFileSync(configPath).toString()

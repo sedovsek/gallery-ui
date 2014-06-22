@@ -1,11 +1,13 @@
 domready = require "domready"
 Gallery  = require "./gallery.coffee"
-Tracker  = require "./tracker.coffee"
 Utils    = require "./utils.coffee"
+Tracker  = require "./tracker.coffee"
+Config   = require "../../config.js"
 
 # TODO: app.coffee should read config?
-
 domready ->
+    Tracker.init()
+
     if Utils.isMobile()
         new Gallery { container : $ '#gallery' }
 

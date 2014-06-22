@@ -1,7 +1,7 @@
-Tracker  = require "./tracker.coffee"
 Clicky   = require "./clicky.coffee"
 Swipey   = require "./swipey.coffee"
 Tappy    = require "./tappy.coffee"
+Tracker  = require "./tracker.coffee"
 
 # Gallery
 class Gallery
@@ -12,8 +12,6 @@ class Gallery
         @images         = @container.find $ 'li'
         @totalImages    = @images?.length
         @currentImage   = 0
-
-        Tracker.init()
 
         @loadUserInterface()
 
