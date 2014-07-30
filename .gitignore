@@ -5,6 +5,7 @@
 npm-debug.log
 node_modules
 logs
+config.js
 
 # Remove once you improve build process
 app/*.js
