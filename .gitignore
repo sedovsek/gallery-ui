@@ -7,9 +7,5 @@ node_modules
 logs
 config.js
 
-# Remove once you improve build process
-app/*.js
-app/*.css
-
 # Tracker
 tracker/lib/*.js
