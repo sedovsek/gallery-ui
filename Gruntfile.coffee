@@ -10,18 +10,28 @@ module.exports = (grunt) ->
 
         browserify:
             dist:
-                files : 'app/script.js' : ['src/coffee/app.coffee']
+                files: 'app/script.js' : ['src/coffee/app.coffee']
             options:
-                transform : ['coffeeify']
+                transform: ['coffeeify']
 
         uglify:
             my_target:
-                files : 'app/script.js': ['app/script.js']
+                files: 'app/script.js': ['app/script.js']
+
+        concat:
+            options:
+                separator: ";\n"
+
+            dist:
+                src: ["src/js/hammer.js", "src/js/zepto.min.js", "app/script.js"]
+                dest: "app/script.js"
 
         sass:
-            build:
+            dist:
                 files:
                     'app/style.css' : 'src/sass/style.scss'
+                options:
+                    sourcemap: 'none'
 
         watch:
             js:
@@ -31,7 +41,7 @@ module.exports = (grunt) ->
                 files: ['src/sass/**']
                 tasks: ['sass']
 
-        run_grunt:
+        run_grunt_for_tracker:
             options:
                 debug: true
 
@@ -40,8 +50,12 @@ module.exports = (grunt) ->
 
         concurrent:
             target:
-                tasks: ['run_grunt', 'watch'],
+                tasks: ['run_grunt_for_tracker', 'watch'],
 
-    grunt.registerTask 'default',     ['clean', 'browserify', 'sass', 'watch']
-    grunt.registerTask 'full-stack',  ['clean', 'browserify', 'sass', 'concurrent']
-    grunt.registerTask 'production',  ['clean', 'browserify', 'uglify', 'sass', 'watch']
+    grunt.registerTask 'default', ['clean', 'browserify', 'concat', 'sass', 'watch']
+
+    # Running one grunt task for Gallery-UI and concurrently for tracker
+    grunt.registerTask 'full-stack', ['clean', 'browserify', 'concat', 'sass', 'concurrent']
+
+    # Just like default, but with uglification
+    grunt.registerTask 'production', ['clean', 'browserify', 'concat', 'uglify', 'sass', 'watch']
