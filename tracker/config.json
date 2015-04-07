@@ -1,6 +1,6 @@
 {
-    "port"     : "9000",
-    "host"     : "192.168.1.170",
+    "port"     : "5000",
+    "host"     : "localhost",
     "interval" : 3,
     "logDir"   : "logs"
 }
