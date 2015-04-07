@@ -37,8 +37,8 @@ The event (tap or swipe) is evenly distributed, as with A/B testing.
 
 ## Support
 
-- iOS6+
-- Android 3.0+
+- iOS7+
+- Android 4.0+
 
 ## Measurements
    - On-site:
