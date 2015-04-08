@@ -1,4 +1,4 @@
-Clicky   = require "./clicky.coffee"
+Both     = require "./both.coffee"
 Swipey   = require "./swipey.coffee"
 Tappy    = require "./tappy.coffee"
 Tracker  = require "./tracker.coffee"
@@ -20,12 +20,18 @@ class Gallery
         @setConainerWidth()
 
     loadUserInterface: ->
-        if Math.round(Math.random()) is 0
+        interfaces = ['Tappy', 'Swipey', 'both']
+        selectedInterface = interfaces[Math.floor(Math.random() * interfaces.length)]
+
+        if selectedInterface is 'Tappy'
             Tracker.setUserInterface 'Tappy'
             new Tappy { gallery : @ }
-        else
+        else if selectedInterface is 'Swipey'
             Tracker.setUserInterface 'Swipey'
             new Swipey { gallery : @ }
+        else
+            Tracker.setUserInterface 'Both'
+            new Both { gallery : @ }
 
     showImage: (image, animate) ->
         if image >= @totalImages

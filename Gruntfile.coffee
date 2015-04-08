@@ -23,7 +23,7 @@ module.exports = (grunt) ->
                 separator: ";\n"
 
             dist:
-                src: ["src/js/hammer.js", "src/js/zepto.min.js", "app/script.js"]
+                src: ["app/script.js", "src/js/hammer.js", "src/js/zepto.min.js"]
                 dest: "app/script.js"
 
         sass:
@@ -36,7 +36,7 @@ module.exports = (grunt) ->
         watch:
             js:
                 files: ['src/coffee/**']
-                tasks: ['clean', 'browserify', 'sass']
+                tasks: ['clean', 'browserify', 'concat', 'sass']
             css:
                 files: ['src/sass/**']
                 tasks: ['sass']
