@@ -7,5 +7,9 @@ node_modules
 logs
 config.js
 
+# Gallery
+app/*.css
+app/*.js
+
 # Tracker
 tracker/lib/*.js
