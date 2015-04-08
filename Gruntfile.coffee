@@ -35,7 +35,7 @@ module.exports = (grunt) ->
 
         watch:
             js:
-                files: ['src/coffee/**']
+                files: ['src/coffee/**', 'config.js']
                 tasks: ['clean', 'browserify', 'concat', 'sass']
             css:
                 files: ['src/sass/**']
