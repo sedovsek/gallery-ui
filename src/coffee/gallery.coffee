@@ -13,27 +13,68 @@ class Gallery
         @totalImages    = @images?.length
         @currentImage   = 0
 
-        @loadUserInterface()
-
-        Tracker.trackSelectedUi()
-
         @setConainerWidth()
 
-    loadUserInterface: ->
-        interfaces = ['Tappy', 'Swipey', 'both']
-        selectedInterface = interfaces[Math.floor(Math.random() * interfaces.length)]
+        ui = @getUserInterface()
 
-        if selectedInterface is 'Tappy'
-            Tracker.setUserInterface 'Tappy'
+        @setGalleryUI ui
+
+        # Randomly add notice about which gesture to use
+        @notice = document.getElementById 'notice'
+
+        if Math.round(Math.random()) is 0
+            @showNotice ui
+            Tracker.trackEvent { 'showNotice': true }
+        else
+            Tracker.trackEvent { 'showNotice': false }
+
+    showNotice: (ui) ->
+        # Tap/Swipe/Swipe or Tap
+        switch ui
+            when 'Tappy'  then gesture = 'Tap'
+            when 'Swipey' then gesture = 'Swipe'
+            when 'Both'   then gesture = 'Swipe or Tap'
+
+        document.getElementById('gesture').innerText = gesture
+        notice.classList.remove 'is-hidden'
+        notice.classList.add    'animate-bounceIn'
+
+        @btn = document.getElementById 'close-btn'
+        @btn.addEventListener 'tap', @hideNotice, false
+        @noticeShown = yes
+
+    hideNotice: (e) ->
+        if e
+            e.stopPropagation()
+            e.gesture.stopDetect()
+
+        notice.style['opacity'] = 0
+        notice.addEventListener 'transitionend webkitTransitionEnd oTransitionEnd', removeNotice, false
+
+        removeNotice = ->
+            notice.style['display'] = 'none'
+            @btn.removeEventListener 'tap', @hideNotice
+            @noticeShown = no
+
+    getUserInterface: ->
+        interfaces = ['Tappy', 'Swipey', 'Both']
+        interfaces[Math.floor(Math.random() * interfaces.length)]
+
+    setGalleryUI: (ui) ->
+        if ui is 'Tappy'
             new Tappy { gallery : @ }
-        else if selectedInterface is 'Swipey'
-            Tracker.setUserInterface 'Swipey'
+        else if ui is 'Swipey'
             new Swipey { gallery : @ }
         else
-            Tracker.setUserInterface 'Both'
             new Both { gallery : @ }
 
-    showImage: (image, animate) ->
+        Tracker.trackSelectedUi ui
+
+    showImage: (image) ->
+        # When correct gesture was performed, the notice
+        # is being removed if it is still present
+        @hideNotice()  if @noticeShown
+
         if image >= @totalImages
             image = 0
         
@@ -45,7 +86,7 @@ class Gallery
         @currentImage = image
 
         offset = -((100 / @totalImages) * image)
-        @setContainerOffset offset, animate
+        @setContainerOffset offset
 
     next: ->
         image = @currentImage + 1
@@ -64,9 +105,9 @@ class Gallery
 
         @container.width @containerWidth * @totalImages
 
-    setContainerOffset: (percent, animate) ->
+    setContainerOffset: (percent) ->
         @container.removeClass 'animate'
-        @container.addClass('animate') if animate
+        @container.addClass 'animate'
         @container.css
             '-webkit-transform': 'translate3d(' + percent + '%,0,0) scale3d(1,1,1)'
             '-ms-transform': 'translate3d(' + percent + '%,0,0) scale3d(1,1,1)'

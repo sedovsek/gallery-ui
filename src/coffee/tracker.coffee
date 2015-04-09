@@ -69,11 +69,8 @@ module.exports =
         eventData.timestamp = new Date
         @trackingPixel.src = @trackingPixel.src.split('=')[0] + '=' + JSON.stringify eventData
 
-    setUserInterface: (ui) -> @ui = ui
-    getUserInterface: -> @ui
-
-    trackSelectedUi: ->
-        @trackEvent { 'user-interface': @getUserInterface() }
+    trackSelectedUi: (ui) ->
+        @trackEvent { 'user-interface': ui }
 
     trackFailedAttempt: ->
         @trackEvent { 'device': 'desktop', 'stopSession': true }

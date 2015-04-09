@@ -1,4 +1,6 @@
-# Gallery Click UI
+Tracker = require "./tracker.coffee"
+
+# Gallery Swipey UI
 class Swipey
     
     constructor: (options) ->
@@ -6,10 +8,10 @@ class Swipey
 
         # Touch events
         new Hammer document, { drag_lock_to_axis: true }
-        $(document).on 'release dragleft dragright swipeleft swiperight', (ev) => @handleTouchEvent ev
+        $(document).on 'tap release dragleft dragright swipeleft swiperight', (ev) => @handleTouchEvent ev
 
     handleTouchEvent: (ev) ->
-        ev.gesture.preventDefault()
+        ev.gesture.stopPropagation()
         
         switch ev.type
             when 'dragright', 'dragleft'
@@ -28,12 +30,18 @@ class Swipey
                 ev.gesture.stopDetect()
 
             when 'release'
-                if Math.abs(ev.gesture.deltaX) > @gallery.containerWidth / 2
+                # Only show next/prev image if drag gesture was > 50% of a screen
+                if Math.abs(ev.gesture.deltaX) > Tracker.deviceWidth / 2
                     if ev.gesture.direction is 'right'
                         @gallery.prev()
                     else
                         @gallery.next()
                 else
+                    Tracker.trackEvent 'insufficientDrag'
                     @gallery.showImage @gallery.currentImage, true
+
+            when 'tap'
+                ev.gesture.stopDetect()
+                Tracker.trackEvent 'faultyAction'
 
 module.exports = Swipey

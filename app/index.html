@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    
     <title>Browse the Gallery</title>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
 </head>
 <body>
+
+<div id="notice" class="notice is-hidden">
+    <button id="close-btn" class="close-btn">×</button>
+    <p>
+        Please <b id="gesture"></b> to preview the photo gallery.
+    </p>
+</div>
 
 <section id="gallery" class="gallery">
     <ul>

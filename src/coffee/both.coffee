@@ -1,6 +1,6 @@
 Tracker = require "./tracker.coffee"
 
-# Gallery Click UI
+# Gallery UI that supports both, swiping and tapping for navigation
 class Both
 
     constructor: (options) ->
@@ -8,21 +8,10 @@ class Both
 
         # Touch events
         new Hammer document, { drag_lock_to_axis: true }
-        $(document).on 'tap', (ev) => @handleTapEvent ev
-        $(document).on 'release dragleft dragright swipeleft swiperight', (ev) => @handleTouchEvent ev
-
-    handleTapEvent: (ev) ->
-        ev.gesture.preventDefault()
-        
-        position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
-
-        if position.horizontal is 'right'
-            @gallery.next()
-        else
-            @gallery.prev()
+        $(document).on 'tap release dragleft dragright swipeleft swiperight', (ev) => @handleTouchEvent ev
 
     handleTouchEvent: (ev) ->
-        ev.gesture.preventDefault()
+        ev.gesture.stopPropagation()
         
         switch ev.type
             when 'dragright', 'dragleft'
@@ -41,12 +30,23 @@ class Both
                 ev.gesture.stopDetect()
 
             when 'release'
-                if Math.abs(ev.gesture.deltaX) > @gallery.containerWidth / 2
+                # Only show next/prev image if drag gesture was > 50% of a screen
+                if Math.abs(ev.gesture.deltaX) > Tracker.deviceWidth / 2
                     if ev.gesture.direction is 'right'
                         @gallery.prev()
                     else
                         @gallery.next()
                 else
+                    Tracker.trackEvent 'insufficientDrag'
                     @gallery.showImage @gallery.currentImage, true
+
+            when 'tap'
+                position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+
+                ev.gesture.stopDetect()
+                if position.horizontal is 'right'
+                    @gallery.next()
+                else
+                    @gallery.prev()
 
 module.exports = Both

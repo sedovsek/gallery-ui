@@ -1,6 +1,6 @@
 Tracker = require "./tracker.coffee"
 
-# Gallery Click UI
+# Gallery Tappy UI
 class Tappy
     
     constructor: (options) ->
@@ -8,16 +8,25 @@ class Tappy
 
         # Touch events
         new Hammer document, { drag_lock_to_axis: true }
-        $(document).on 'tap', (ev) => @handleTapEvent ev
+        $(document).on 'tap release swipeleft swiperight', (ev) => @handleTouchEvent ev
 
-    handleTapEvent: (ev) ->
-        ev.gesture.preventDefault()
+    handleTouchEvent: (ev) ->
+        ev.gesture.stopPropagation()
         
-        position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+        switch ev.type
+            when 'release', 'swipeleft', 'swiperight'
+                ev.gesture.stopDetect()
+                Tracker.trackEvent 'faultyAction'
 
-        if position.horizontal is 'right'
-            @gallery.next()
-        else
-            @gallery.prev()
+            when 'tap'
+                ev.gesture.stopPropagation()
+                ev.gesture.stopDetect()
+
+                position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+
+                if position.horizontal is 'right'
+                    @gallery.next()
+                else
+                    @gallery.prev()
 
 module.exports = Tappy
