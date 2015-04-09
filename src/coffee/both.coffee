@@ -37,7 +37,7 @@ class Both
                     else
                         @gallery.next()
                 else
-                    Tracker.trackEvent 'insufficientDrag'
+                    Tracker.trackEvent { 'insufficientDrag' : yes }
                     @gallery.showImage @gallery.currentImage, true
 
             when 'tap'

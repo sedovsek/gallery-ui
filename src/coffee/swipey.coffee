@@ -37,11 +37,11 @@ class Swipey
                     else
                         @gallery.next()
                 else
-                    Tracker.trackEvent 'insufficientDrag'
+                    Tracker.trackEvent { 'insufficientDrag' : yes }
                     @gallery.showImage @gallery.currentImage, true
 
             when 'tap'
                 ev.gesture.stopDetect()
-                Tracker.trackEvent 'faultyAction'
+                Tracker.trackEvent { 'faultyAction' : yes }
 
 module.exports = Swipey

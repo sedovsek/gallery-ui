@@ -16,7 +16,7 @@ class Tappy
         switch ev.type
             when 'release', 'swipeleft', 'swiperight'
                 ev.gesture.stopDetect()
-                Tracker.trackEvent 'faultyAction'
+                Tracker.trackEvent { 'faultyAction' : yes }
 
             when 'tap'
                 ev.gesture.stopPropagation()
