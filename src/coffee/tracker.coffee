@@ -3,8 +3,9 @@ module.exports =
     init: ->
         # Inject Tracking Pixel
         @sessionId = @getUniqueSessionsId()
-        @trackingPixel = document.createElement 'img'
-        @trackingPixel.src = 'http://'+Config.trackerHost+':'+Config.trackerPort+'/'+'pixel.gif?event=' + JSON.stringify { 'sessionStart' : @sessionId }
+
+        @trackingPixel = new Image()
+        @trackingPixel.src = 'http://'+Config.trackerHost+':'+Config.trackerPort+'/'+'pixel.gif?event='
 
         @deviceWidth  = self.innerWidth
         @deviceHeight = self.innerHeight
@@ -31,6 +32,7 @@ module.exports =
 
     storeSessionMetaData: ->
         @trackEvent
+            'sessionStart' : @sessionId
             'userAgent'    : navigator.userAgent
             'deviceWidth'  : @deviceWidth
             'deviceHeight' : @deviceHeight
@@ -67,7 +69,10 @@ module.exports =
     trackEvent: (eventData) ->
         eventData.sessionId = @sessionId
         eventData.timestamp = new Date
-        @trackingPixel.src = @trackingPixel.src.split('=')[0] + '=' + JSON.stringify eventData
+
+        req = new XMLHttpRequest()
+        req.open 'GET', @trackingPixel.src.split('=')[0] + '=' + JSON.stringify eventData, true
+        req.send()
 
     trackSelectedUi: (ui) ->
         @trackEvent { 'user-interface': ui }
