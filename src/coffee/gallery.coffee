@@ -47,6 +47,7 @@ class Gallery
         if e
             e.stopPropagation()
             e.gesture.stopDetect()
+            Tracker.trackEvent { 'hideNotice' : true }
 
         notice.style['opacity'] = 0
         notice.addEventListener 'transitionend webkitTransitionEnd oTransitionEnd', removeNotice, false
