@@ -1,6 +1,0 @@
-{
-    "port"     : "5000",
-    "host"     : "localhost",
-    "interval" : 3,
-    "logDir"   : "logs"
-}
