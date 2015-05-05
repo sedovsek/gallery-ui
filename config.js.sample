@@ -1,4 +1,7 @@
+// Rename this file to config.js and
+// set trackerPort and trackerHost
+
 Config = {
-    "trackerPort" : "80",
-    "trackerHost" : "ui-tracker.herokuapp.com"
+    "trackerPort" : "8080",
+    "trackerHost" : "ui-tracker.yourapp.com"
 }
