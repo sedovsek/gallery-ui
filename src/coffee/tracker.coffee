@@ -26,6 +26,12 @@ module.exports =
         $(document).on 'dragup dragdown dragleft dragright
                         dragstart dragend',
                     (ev) => @handleDragEvent ev
+
+        # Track page visibility
+        visProp = @_getHiddenProp()
+        if visProp
+            visEvtname = visProp.replace(/[H|h]idden/, '') + 'visibilitychange'
+            $(document).on visEvtname, => @handleVisibilityChange()
         
     getUniqueSessionsId: ->
         Math.floor(Math.random()*100000) + '_' + new Date().getTime()
@@ -66,6 +72,21 @@ module.exports =
             delete @dragStarted
             delete @lastDragDirection
 
+    handleVisibilityChange: ->
+        console.log 'changing visibility'
+        _isHidden = =>
+            prop = @_getHiddenProp()
+
+            if prop
+                return document[prop]
+            else
+                return false
+        
+        if _isHidden()
+            @trackEvent { 'visibilityHidden' : no }
+        else
+            @trackEvent { 'visibilityHidden' : yes }
+
     trackEvent: (eventData) ->
         eventData.sessionId = @sessionId
         eventData.timestamp = new Date
@@ -95,3 +116,11 @@ module.exports =
         pos.horizontal = if coordinates.x <= (@deviceWidth)/2  then 'left' else 'right'
 
         pos
+
+    _getHiddenProp: ->
+        return 'hidden'  if 'hidden' of document
+
+        for prefix in ['webkit', 'moz', 'ms', 'o']
+            return prefix + 'Hidden'  if (prefix + 'Hidden') of document
+
+        return false
