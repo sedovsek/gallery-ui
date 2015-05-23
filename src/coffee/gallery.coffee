@@ -39,8 +39,6 @@ class Gallery
         notice.classList.remove 'is-hidden'
         notice.classList.add    'animate-bounceIn'
 
-        @btn = document.getElementById 'close-btn'
-        @btn.addEventListener 'tap', @hideNotice, false
         @noticeShown = yes
 
     hideNotice: (e) ->
@@ -51,14 +49,13 @@ class Gallery
 
         notice.style['opacity'] = 0
         notice.addEventListener 'transitionend webkitTransitionEnd oTransitionEnd', removeNotice, false
+        @noticeShown = no
 
         removeNotice = ->
             notice.style['display'] = 'none'
-            @btn.removeEventListener 'tap', @hideNotice
-            @noticeShown = no
 
     getUserInterface: ->
-        interfaces = ['Tappy', 'Swipey', 'Both']
+        interfaces = ['Tappy', 'Swipey']
         interfaces[Math.floor(Math.random() * interfaces.length)]
 
     setGalleryUI: (ui) ->

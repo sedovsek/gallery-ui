@@ -42,6 +42,10 @@ class Swipey
 
             when 'tap'
                 ev.gesture.stopDetect()
-                Tracker.trackEvent { 'faultyAction' : yes }
+
+                if @gallery.noticeShown
+                    @gallery.hideNotice()
+                else
+                    Tracker.trackEvent { 'faultyAction' : yes }
 
 module.exports = Swipey
