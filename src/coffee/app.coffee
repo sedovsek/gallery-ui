@@ -4,7 +4,6 @@ Utils    = require "./utils.coffee"
 Tracker  = require "./tracker.coffee"
 Config   = require "../../config.js"
 
-# TODO: app.coffee should read config?
 domready ->
     Tracker.init()
 
