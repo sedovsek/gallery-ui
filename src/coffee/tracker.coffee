@@ -73,7 +73,6 @@ module.exports =
             delete @lastDragDirection
 
     handleVisibilityChange: ->
-        console.log 'changing visibility'
         _isHidden = =>
             prop = @_getHiddenProp()
 
