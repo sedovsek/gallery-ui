@@ -17,9 +17,7 @@ module.exports =
         $(document).on 'hold
                         tap doubletap
                         swipeup swipedown swipeleft swiperight
-                        transform transformstart transformend
-                        rotate
-                        pinch pinchin pinchout',
+                        rotate',
                     (ev) => @handleTouchEvent ev
 
         # Track drag events
