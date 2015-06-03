@@ -69,10 +69,6 @@ class Gallery
         Tracker.trackSelectedUi ui
 
     showImage: (image) ->
-        # When correct gesture was performed, the notice
-        # is being removed if it is still present
-        @hideNotice()  if @noticeShown
-
         if image >= @totalImages
             image = 0
         
@@ -98,9 +94,8 @@ class Gallery
 
     setConainerWidth: ->
         self = @
-        @containerWidth = @container.width()
+        @containerWidth = if window.innerWidth > 0 then window.innerWidth else screen.width
         @images.each -> $(@).width self.containerWidth
-
         @container.width @containerWidth * @totalImages
 
     setContainerOffset: (percent) ->
