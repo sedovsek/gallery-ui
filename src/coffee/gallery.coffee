@@ -41,11 +41,8 @@ class Gallery
 
         @noticeShown = yes
 
-    hideNotice: (e) ->
-        if e
-            e.stopPropagation()
-            e.gesture.stopDetect()
-            Tracker.trackEvent { 'hideNotice' : true }
+    hideNotice: ->
+        Tracker.trackEvent { 'hideNotice' : true }
 
         notice.style['opacity'] = 0
         notice.addEventListener 'transitionend webkitTransitionEnd oTransitionEnd', removeNotice, false
@@ -69,6 +66,8 @@ class Gallery
         Tracker.trackSelectedUi ui
 
     showImage: (image) ->
+        @hideNotice()  if @noticeShown
+
         if image >= @totalImages
             image = 0
         

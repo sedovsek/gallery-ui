@@ -14,7 +14,12 @@ class Tappy
         ev.gesture.stopPropagation()
         
         switch ev.type
-            when 'release', 'swipeleft', 'swiperight'
+            when 'release'
+                if ev.gesture.direction in ['left', 'right']
+                    ev.gesture.stopDetect()
+                    Tracker.trackEvent { 'faultyAction' : yes }
+
+            when 'swipeleft', 'swiperight'
                 ev.gesture.stopDetect()
                 Tracker.trackEvent { 'faultyAction' : yes }
 
@@ -22,14 +27,11 @@ class Tappy
                 ev.gesture.stopPropagation()
                 ev.gesture.stopDetect()
 
-                if @gallery.noticeShown
-                    @gallery.hideNotice()
-                else
-                    position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+                position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
 
-                    if position.horizontal is 'right'
-                        @gallery.next()
-                    else
-                        @gallery.prev()
+                if position.horizontal is 'right'
+                    @gallery.next()
+                else
+                    @gallery.prev()
 
 module.exports = Tappy
