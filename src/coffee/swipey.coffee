@@ -32,12 +32,12 @@ class Swipey
             when 'release'
                 # Only show next/prev image if drag gesture was > 50% of a screen
                 if Math.abs(ev.gesture.deltaX) > Tracker.deviceWidth / 2
-                    if ev.gesture.direction is 'right'
-                        @gallery.prev()
-                    else
-                        @gallery.next()
+                    @gallery.prev()  if ev.gesture.direction is 'right'
+                    @gallery.next()  if ev.gesture.direction is 'left'
                 else
-                    Tracker.trackEvent { 'insufficientDrag' : yes }
+                    if ev.gesture.direction in ['left', 'right']
+                        Tracker.trackEvent { 'insufficientDrag' : ev.gesture.direction }
+
                     @gallery.showImage @gallery.currentImage, true
 
             when 'tap'
