@@ -22,11 +22,14 @@ class Tappy
                 ev.gesture.stopPropagation()
                 ev.gesture.stopDetect()
 
-                position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
-
-                if position.horizontal is 'right'
-                    @gallery.next()
+                if @gallery.noticeShown
+                    @gallery.hideNotice()
                 else
-                    @gallery.prev()
+                    position = Tracker.calculateInteractionPosition { x: ev.gesture.center.pageX, y: ev.gesture.center.pageY }
+
+                    if position.horizontal is 'right'
+                        @gallery.next()
+                    else
+                        @gallery.prev()
 
 module.exports = Tappy
